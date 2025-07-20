@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>POG - Vitesse personnalisée</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      background-image: url('css/images/background.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: white;
+      font-family: sans-serif;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2rem;
+    }
+
+    .input-container {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    input[type="number"] {
+      padding: 0.5rem;
+      font-size: 1rem;
+      width: 100px;
+    }
+
+    button {
+      padding: 0.5rem 1rem;
+      margin-left: 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .result {
+      text-align: center;
+      margin: 1rem 0;
+      font-weight: bold;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    th, td {
+      padding: 0.5rem;
+      border: 1px solid #444;
+      text-align: center;
+    }
+
+    th {
+      background-color: rgba(50, 50, 50, 0.7);
+    }
+
+    tr:nth-child(even) {
+      background-image: url('css/images/leaves.jpg');
+    }
+
+    tr:nth-child(odd) {
+      background-image: url('css/images/netherrack.jpg');
+    }
+
+    tr {
+      background-repeat: repeat;
+      background-size: auto;
+      color: white;
+      height: 40px;
+    }
+
+    .progress-bar {
+      margin: 2rem auto;
+      width: 80%;
+      height: 20px;
+      background-color: #444;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 100%;
+      width: 100%;
+      background-color: limegreen;
+    }
+
+    .back-button {
+      display: block;
+      margin: 2rem auto;
+      text-align: center;
+      text-decoration: none;
+      background: #444;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Vitesse de minage personnalisée (POG)</h1>
+
+  <div class="input-container">
+    <label for="speedInput">Temps pour casser 100 blocs (en secondes) :</label>
+    <input type="number" id="speedInput" min="1" value="60">
+    <button onclick="calculate()">Calculer</button>
+  </div>
+
+  <div class="result" id="totalTimeDisplay"></div>
+
+  <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Niveau</th>
+        <th>Blocs à casser</th>
+        <th>Temps estimé (s)</th>
+      </tr>
+    </thead>
+    <tbody id="customTableBody"></tbody>
+  </table>
+
+  <a href="pickaxe_level_progression.html" class="back-button">← Retour</a>
+
+  <script>
+    const levelData = [
+      [1, 52], [2, 208], [3, 404], [4, 625], [5, 866],
+      [6, 1125], [7, 1398], [8, 1683], [9, 1981], [10, 2289],
+      [11, 2607], [12, 2935], [13, 3270], [14, 3615], [15, 3967],
+      [16, 4326], [17, 4692], [18, 5065], [19, 5445], [20, 5831],
+      [21, 6222], [22, 6620], [23, 7023], [24, 7431], [25, 7845],
+      [26, 8264], [27, 8688], [28, 9116], [29, 9550], [30, 9988],
+      [31, 10430], [32, 10876], [33, 11328], [34, 11783], [35, 12242],
+      [36, 12706], [37, 13173], [38, 13644], [39, 14119]
+    ];
+
+    function calculate() {
+      const timePer100 = parseFloat(document.getElementById("speedInput").value);
+      if (isNaN(timePer100) || timePer100 <= 0) {
+        alert("Entrez un temps valide.");
+        return;
+      }
+
+      const timePerBlock = timePer100 / 100;
+      let totalTime = 0;
+      const tbody = document.getElementById("customTableBody");
+      tbody.innerHTML = "";
+
+      for (let i = 0; i < levelData.length; i++) {
+        const level = levelData[i][0];
+        const blocks = levelData[i][1];
+        const levelTime = (blocks * timePerBlock).toFixed(1);
+        totalTime += parseFloat(levelTime);
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${level} → ${level + 1}</td><td>${blocks}</td><td>${levelTime}s</td>`;
+        tbody.appendChild(tr);
+      }
+
+      document.getElementById("totalTimeDisplay").textContent = 
+        `Temps total jusqu'au niveau 40 : ${totalTime.toFixed(1)}s (~${(totalTime/60).toFixed(1)} min)`;
+
+      document.getElementById("progressBar").style.width = "100%";
+    }
+  </script>
+</body>
+</html>
