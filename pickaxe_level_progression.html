@@ -173,11 +173,14 @@
     ];
 
     function getEfficiency(level) {
-      if (level <= 10) return 0.95;
+      if (level <= 5) return 0.95;
+      if (level <= 10) return 0.5;
       if (level <= 15) return 0.35;
-      if (level <= 25) return 0.25;
-      if (level <= 30) return 0.2;
-      if (level <= 35) return 0.18;
+      if (level <= 20) return 0.25;
+      if (level <= 25) return 0.2;
+      if (level <= 30) return 0.18;
+      if (level <= 35) return 0.15;
+      if (level <= 40) return 0.13;
       return 0.15;
     }
 
