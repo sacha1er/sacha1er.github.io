@@ -31,7 +31,13 @@
       border: 1px solid #555;
       padding: 0.5rem;
       text-align: center;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    tr.level-row {
+      height: 40px;
+      background-repeat: repeat;
+      background-size: 40px 40px;
     }
 
     .input-container {
@@ -76,7 +82,6 @@
       font-weight: bold;
     }
 
-    /* Toggle switch */
     .toggle-container {
       text-align: center;
       margin: 1rem 0;
@@ -186,12 +191,13 @@
         const totalTime = (blocks * time).toFixed(1);
 
         const row = document.createElement('tr');
+        row.className = 'level-row';
         row.innerHTML = `<td>${level} → ${level + 1}</td><td>${blocks}</td><td>${time}s</td><td>${totalTime}</td>`;
 
         const image = level <= 20 ? 'leaves.jpg' : 'netherrack.jpg';
         row.style.backgroundImage = `url('css/images/${image}')`;
         row.style.backgroundRepeat = 'repeat';
-        row.style.backgroundSize = 'auto';
+        row.style.backgroundSize = '40px 40px';
         row.style.height = '40px';
         row.style.color = 'white';
 
