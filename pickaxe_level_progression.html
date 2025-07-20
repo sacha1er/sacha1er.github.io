@@ -5,95 +5,114 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Progression de la pioche</title>
   <style>
-    #progression-wrapper {
+    /* Reset CSS pour neutraliser les styles globaux */
+    html, body, div, span, applet, object, iframe,
+    h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+    a, abbr, acronym, address, big, cite, code,
+    del, dfn, em, img, ins, kbd, q, s, samp,
+    small, strike, strong, sub, sup, tt, var,
+    b, u, i, center,
+    dl, dt, dd, ol, ul, li,
+    fieldset, form, label, legend,
+    table, caption, tbody, tfoot, thead, tr, th, td,
+    article, aside, canvas, details, embed,
+    figure, figcaption, footer, header, hgroup,
+    menu, nav, output, ruby, section, summary,
+    time, mark, audio, video {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      font-size: 100%;
+      font: inherit;
+      vertical-align: baseline;
+    }
+
+    /* Page neutre */
+    body {
+      background-color: #1e1e1e;
+      color: #f0f0f0;
       font-family: Arial, sans-serif;
-      background: #111;
-      color: #f5f5f5;
-      padding: 2rem;
-      max-width: 900px;
-      margin: auto;
+      padding: 20px;
     }
-    #progression-wrapper h1 {
-      color: #00c853;
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 0.5em;
     }
-    #progression-wrapper table {
-      width: 100%;
+
+    table {
       border-collapse: collapse;
-      margin-bottom: 2rem;
+      width: 100%;
+      margin-top: 1em;
     }
-    #progression-wrapper th, #progression-wrapper td {
+
+    th, td {
       border: 1px solid #444;
-      padding: 8px 12px;
+      padding: 8px;
       text-align: center;
     }
-    #progression-wrapper th {
-      background-color: #222;
+
+    th {
+      background-color: #333;
     }
-    #progression-wrapper tr:nth-child(even) {
-      background-color: #1a1a1a;
+
+    tr:nth-child(even) {
+      background-color: #2a2a2a;
     }
-    #progression-wrapper .footer {
-      margin-top: 2rem;
-      font-size: 0.9rem;
+
+    .note {
+      font-size: 0.9em;
       color: #aaa;
+    }
+
+    .back-link {
+      margin-top: 2em;
+      display: inline-block;
+      color: #4da6ff;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <div id="progression-wrapper">
-    <h1>Progression de niveau de la pioche</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Niveau</th>
-          <th>Blocs requis</th>
-          <th>Temps par bloc (s)</th>
-          <th>Temps total (s)</th>
-        </tr>
-      </thead>
-      <tbody id="table-body"></tbody>
-    </table>
-    <div class="footer" id="footer"></div>
-  </div>
+  <h1>Progression de la pioche</h1>
+  <p class="note">Cette page est isolée des styles du site principal.</p>
 
-  <script>
-    const niveaux = [
-      [2, 52, 0.95], [3, 208, 0.95], [4, 404, 0.95], [5, 625, 0.95],
-      [6, 866, 0.5], [7, 1125, 0.5], [8, 1398, 0.5], [9, 1683, 0.5], [10, 1981, 0.5],
-      [11, 2289, 0.35], [12, 2607, 0.35], [13, 2935, 0.35], [14, 3270, 0.35], [15, 3615, 0.35],
-      [16, 3967, 0.25], [17, 4326, 0.25], [18, 4692, 0.25], [19, 5065, 0.25], [20, 5445, 0.25],
-      [21, 5831, 0.2], [22, 6222, 0.2], [23, 6620, 0.2], [24, 7023, 0.2], [25, 7431, 0.2],
-      [26, 7845, 0.18], [27, 8264, 0.18], [28, 8688, 0.18], [29, 9116, 0.18], [30, 9550, 0.18],
-      [31, 9988, 0.15], [32, 10430, 0.15], [33, 10876, 0.15], [34, 11328, 0.15], [35, 11783, 0.15],
-      [36, 12242, 0.13], [37, 12706, 0.13], [38, 13173, 0.13], [39, 13644, 0.13], [40, 14119, 0.13]
-    ];
+  <table>
+    <thead>
+      <tr>
+        <th>Niveau</th>
+        <th>Blocs à casser</th>
+        <th>Remarques</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1 → 2</td><td>52</td><td></td></tr>
+      <tr><td>2 → 3</td><td>208</td><td></td></tr>
+      <tr><td>3 → 4</td><td>404</td><td></td></tr>
+      <tr><td>4 → 5</td><td>625</td><td></td></tr>
+      <tr><td>5 → 6</td><td>866</td><td></td></tr>
+      <tr><td>6 → 7</td><td>1125</td><td></td></tr>
+      <tr><td>7 → 8</td><td>1398</td><td></td></tr>
+      <tr><td>8 → 9</td><td>1683</td><td></td></tr>
+      <tr><td>9 → 10</td><td>1981</td><td></td></tr>
+      <tr><td>10 → 11</td><td>2289</td><td></td></tr>
+      <tr><td>11 → 12</td><td>2607</td><td>feuilles, neige</td></tr>
+      <tr><td>12 → 13</td><td>2935</td><td>feuilles, neige</td></tr>
+      <tr><td>13 → 14</td><td>3270</td><td>feuilles, neige</td></tr>
+      <tr><td>14 → 15</td><td>3615</td><td>feuilles, neige</td></tr>
+      <tr><td>15 → 16</td><td>3967</td><td>feuilles, neige</td></tr>
+      <tr><td>16 → 17</td><td>4326</td><td>feuilles, neige</td></tr>
+      <tr><td>17 → 18</td><td>4692</td><td>feuilles, neige</td></tr>
+      <tr><td>18 → 19</td><td>5065</td><td>feuilles, neige</td></tr>
+      <tr><td>19 → 20</td><td>5445</td><td>feuilles, neige</td></tr>
+    </tbody>
+  </table>
 
-    let totalTemps = 0;
-    let totalBlocs = 0;
-    const tbody = document.getElementById("table-body");
-
-    niveaux.forEach(([niveau, blocs, temps]) => {
-      const ligne = document.createElement("tr");
-      const tempsTotal = blocs * temps;
-      totalTemps += tempsTotal;
-      totalBlocs += blocs;
-      ligne.innerHTML = `
-        <td> ${niveau - 1} → ${niveau} </td>
-        <td> ${blocs.toLocaleString()} </td>
-        <td> ${temps.toFixed(2)} </td>
-        <td> ${tempsTotal.toFixed(2)} </td>
-      `;
-      tbody.appendChild(ligne);
-    });
-
-    const heures = Math.floor(totalTemps / 3600);
-    const minutes = Math.floor((totalTemps % 3600) / 60);
-    const secondes = Math.floor(totalTemps % 60);
-
-    document.getElementById("footer").innerText = `
-      Total blocs cassés : ${totalBlocs.toLocaleString()}\n
-      Temps total estimé : ${heures} h ${minutes} min ${secondes} s
-    `;
-  </script>
+  <a class="back-link" href="/">← Retour à l'accueil</a>
 </body>
 </html>
+e
