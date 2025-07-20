@@ -1,61 +1,53 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Site Classique</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            text-align: center;
-        }
-        header {
-            background: #333;
-            color: white;
-            padding: 15px;
-            font-size: 24px;
-        }
-        nav {
-            background: #444;
-            padding: 10px;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 18px;
-        }
-        section {
-            padding: 20px;
-            max-width: 800px;
-            margin: auto;
-            background: white;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-        }
-        footer {
-            margin-top: 20px;
-            padding: 10px;
-            background: #333;
-            color: white;
-            font-size: 14px;
-        }
-    </style>
-</head>
-<body>
-    <header>Mon Site Classique</header>
-    <nav>
-        <a href="#">Accueil</a>
-        <a href="#">À Propos</a>
-        <a href="#">Contact</a>
-    </nav>
-    <section>
-        <h2>Bienvenue sur mon site</h2>
-        <p>Ceci est une page simple avec un design épuré.</p>
-    </section>
-    <footer>&copy; 2025 Mon Site Classique. Tous droits réservés.</footer>
-</body>
-</html>
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+@charset "utf-8";
+
+
+
+// Our variables
+$base-font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$base-font-size:   16px;
+$base-font-weight: 400;
+$small-font-size:  $base-font-size * 0.875;
+$base-line-height: 1.5;
+
+$spacing-unit:     30px;
+
+$text-color:       #111;
+$background-color: #fdfdfd;
+$brand-color:      #2a7ae2;
+
+$grey-color:       #828282;
+$grey-color-light: lighten($grey-color, 40%);
+$grey-color-dark:  darken($grey-color, 25%);
+
+// Width of the content area
+$content-width:    800px;
+
+$on-palm:          600px;
+$on-laptop:        800px;
+
+
+
+// Use media queries like this:
+// @include media-query($on-palm) {
+//     .wrapper {
+//         padding-right: $spacing-unit / 2;
+//         padding-left: $spacing-unit / 2;
+//     }
+// }
+@mixin media-query($device) {
+    @media screen and (max-width: $device) {
+        @content;
+    }
+}
+
+
+
+// Import partials from `sass_dir` (defaults to `_sass`)
+@import
+        "base",
+        "layout",
+        "syntax-highlighting"
+;
