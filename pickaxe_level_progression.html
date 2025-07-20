@@ -9,52 +9,79 @@
       padding: 0;
       box-sizing: border-box;
     }
+
     body {
       font-family: sans-serif;
       background-image: url('css/images/background.jpg');
       background-size: cover;
       background-attachment: fixed;
-      background-position: center;
-      color: #eee;
+      color: white;
       padding: 2rem;
     }
+
     h1 {
       text-align: center;
       margin-bottom: 2rem;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 2rem;
-    }
-    th, td {
-      border: 1px solid #555;
-      padding: 0.5rem;
-      text-align: center;
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-    th {
-      background-color: rgba(51, 51, 51, 0.8);
-    }
+
     .input-container {
       margin: 2rem 0;
       text-align: center;
     }
+
     input {
       padding: 0.5rem;
       font-size: 1rem;
       width: 60px;
     }
+
     button {
       padding: 0.5rem 1rem;
       margin-left: 1rem;
       font-size: 1rem;
       cursor: pointer;
     }
+
     .result {
       margin-top: 1rem;
       font-size: 1.2rem;
       font-weight: bold;
+    }
+
+    .progress-container {
+      margin: 2rem auto;
+      width: 80%;
+      background: #444;
+      height: 30px;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: limegreen;
+      width: 0%;
+      transition: width 0.5s;
+      text-align: center;
+      line-height: 30px;
+      color: black;
+      font-weight: bold;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 2rem;
+    }
+
+    th, td {
+      border: 1px solid #555;
+      padding: 0.5rem;
+      text-align: center;
+    }
+
+    th {
+      background-color: #222;
     }
   </style>
 </head>
@@ -66,6 +93,10 @@
     <input type="number" id="level" min="1" max="40" value="1">
     <button onclick="calculateTime()">Calculer le temps</button>
     <div id="result" class="result"></div>
+  </div>
+
+  <div class="progress-container">
+    <div id="progressBar" class="progress-bar">0%</div>
   </div>
 
   <table>
@@ -101,46 +132,57 @@
       return 0.15;
     }
 
-function populateTable() {
-  const tbody = document.getElementById("table-body");
-  tbody.innerHTML = "";
-  for (let i = 0; i < levelData.length - 1; i++) {
-    const level = levelData[i][0];
-    const blocks = levelData[i][1];
-    const time = getEfficiency(level);
-    const totalTime = (blocks * time).toFixed(1);
+    function populateTable() {
+      const tbody = document.getElementById("table-body");
+      tbody.innerHTML = "";
 
-    const row = document.createElement('tr');
-    row.innerHTML = `<td>${level} → ${level + 1}</td><td>${blocks}</td><td>${time}s</td><td>${totalTime}</td>`;
+      for (let i = 0; i < levelData.length - 1; i++) {
+        const level = levelData[i][0];
+        const blocks = levelData[i][1];
+        const time = getEfficiency(level);
+        const totalTime = (blocks * time).toFixed(1);
 
-    const image = level <= 20 ? 'leaves.jpg' : 'netherrack.jpg';
-    row.style.backgroundImage = `url('css/images/${image}')`;
-    row.style.backgroundRepeat = 'repeat';
-    row.style.backgroundSize = 'auto'; // ou 'contain'
-    row.style.backgroundPosition = 'center';
-    row.style.height = '40px'; // force la hauteur de la ligne
-    row.style.color = 'white'; // bonne lisibilité
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>${level} → ${level + 1}</td><td>${blocks}</td><td>${time}s</td><td>${totalTime}</td>`;
 
-    tbody.appendChild(row);
-  }
-}
+        const image = level <= 20 ? 'leaves.jpg' : 'netherrack.jpg';
+        row.style.backgroundImage = `url('css/images/${image}')`;
+        row.style.backgroundRepeat = 'repeat';
+        row.style.backgroundSize = '40px 40px';
+        row.style.backgroundPosition = 'top left';
+        row.style.height = '40px';
+        row.style.lineHeight = '40px';
+        row.style.color = 'white';
 
+        tbody.appendChild(row);
+      }
+    }
 
     function calculateTime() {
       const input = document.getElementById("level");
       const result = document.getElementById("result");
+      const progress = document.getElementById("progressBar");
+
       let level = parseInt(input.value);
       if (isNaN(level) || level < 1 || level >= 40) {
         result.textContent = "Veuillez entrer un niveau entre 1 et 39.";
+        progress.style.width = "0%";
+        progress.textContent = "0%";
         return;
       }
+
       let totalTime = 0;
       for (let i = level - 1; i < levelData.length - 1; i++) {
         const blocks = levelData[i][1];
         const time = getEfficiency(levelData[i][0]);
         totalTime += blocks * time;
       }
-      result.textContent = `Temps estimé jusqu'au niveau 40 : ${totalTime.toFixed(1)} secondes (~${(totalTime/60).toFixed(1)} minutes)`;
+
+      const percent = ((level - 1) / 39) * 100;
+      progress.style.width = `${percent.toFixed(1)}%`;
+      progress.textContent = `${Math.round(percent)}%`;
+
+      result.textContent = `Temps estimé jusqu'au niveau 40 : ${totalTime.toFixed(1)} secondes (~${(totalTime / 60).toFixed(1)} minutes)`;
     }
 
     populateTable();
