@@ -154,12 +154,11 @@
         tr.innerHTML = `<td>${level} → ${level + 1}</td><td>${blocks}</td><td>${levelTime}s</td>`;
 
         const image = level < 1 ? 'leaves.jpg' : 'netherrack.jpg';
-        tr.style.backgroundImage = `url('css/images/${image}')`;
-        tr.style.backgroundRepeat = 'repeat';
-        tr.style.backgroundSize = 'auto';
-        tr.style.backgroundPosition = 'center';
-        tr.style.height = '40px';
-        tr.style.color = 'white';
+        row.style.backgroundImage = `url('css/images/${image}')`;
+        row.style.backgroundRepeat = 'repeat';
+        row.style.backgroundSize = '40px 40px';
+        row.style.color = 'white';
+        row.style.height = '40px';
 
         tbody.appendChild(tr);
       }
