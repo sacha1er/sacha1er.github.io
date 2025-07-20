@@ -222,7 +222,7 @@
         const time = getEfficiency(levelData[i][0]);
         totalTime += blocks * time;
       }
-      result.textContent = `Temps estimé jusqu'au niveau 40 : ${totalTime.toFixed(1)} secondes (~${(totalTime / 60).toFixed(1)} minutes, ${(totalTime / 60 / 60).toFixed(1)}) `;
+      result.textContent = `Temps estimé jusqu'au niveau 40 : ${totalTime.toFixed(1)} secondes (~${(totalTime / 60).toFixed(1)} minutes, ${(totalTime / 60 / 60).toFixed(1)} heures) `;
     }
 
     function updateProgressBar() {
