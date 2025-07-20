@@ -101,25 +101,30 @@
       return 0.15;
     }
 
-    function populateTable() {
-      const tbody = document.getElementById("table-body");
-      tbody.innerHTML = "";
-      for (let i = 0; i < levelData.length - 1; i++) {
-        const level = levelData[i][0];
-        const blocks = levelData[i][1];
-        const time = getEfficiency(level);
-        const totalTime = (blocks * time).toFixed(1);
+function populateTable() {
+  const tbody = document.getElementById("table-body");
+  tbody.innerHTML = "";
+  for (let i = 0; i < levelData.length - 1; i++) {
+    const level = levelData[i][0];
+    const blocks = levelData[i][1];
+    const time = getEfficiency(level);
+    const totalTime = (blocks * time).toFixed(1);
 
-        const row = document.createElement('tr');
-        row.innerHTML = `<td>${level} → ${level + 1}</td><td>${blocks}</td><td>${time}s</td><td>${totalTime}</td>`;
-        row.style.backgroundImage = `url('css/images/${level <= 20 ? 'leaves.jpg' : 'netherrack.jpg'}')`;
-        row.style.backgroundSize = 'cover';
-        row.style.backgroundRepeat = 'no-repeat';
-        row.style.backgroundPosition = 'center';
-        row.style.color = 'white';
-        tbody.appendChild(row);
-      }
-    }
+    const row = document.createElement('tr');
+    row.innerHTML = `<td>${level} → ${level + 1}</td><td>${blocks}</td><td>${time}s</td><td>${totalTime}</td>`;
+
+    const image = level <= 20 ? 'leaves.jpg' : 'netherrack.jpg';
+    row.style.backgroundImage = `url('css/images/${image}')`;
+    row.style.backgroundRepeat = 'repeat';
+    row.style.backgroundSize = 'auto'; // ou 'contain'
+    row.style.backgroundPosition = 'center';
+    row.style.height = '40px'; // force la hauteur de la ligne
+    row.style.color = 'white'; // bonne lisibilité
+
+    tbody.appendChild(row);
+  }
+}
+
 
     function calculateTime() {
       const input = document.getElementById("level");
