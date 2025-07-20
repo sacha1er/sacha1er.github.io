@@ -1,118 +1,136 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>Progression de la pioche</title>
   <style>
-    /* Reset CSS pour neutraliser les styles globaux */
-    html, body, div, span, applet, object, iframe,
-    h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-    a, abbr, acronym, address, big, cite, code,
-    del, dfn, em, img, ins, kbd, q, s, samp,
-    small, strike, strong, sub, sup, tt, var,
-    b, u, i, center,
-    dl, dt, dd, ol, ul, li,
-    fieldset, form, label, legend,
-    table, caption, tbody, tfoot, thead, tr, th, td,
-    article, aside, canvas, details, embed,
-    figure, figcaption, footer, header, hgroup,
-    menu, nav, output, ruby, section, summary,
-    time, mark, audio, video {
+    * {
       margin: 0;
       padding: 0;
-      border: 0;
-      font-size: 100%;
-      font: inherit;
-      vertical-align: baseline;
+      box-sizing: border-box;
     }
-
-    /* Page neutre */
     body {
+      font-family: sans-serif;
       background-color: #1e1e1e;
-      color: #f0f0f0;
-      font-family: Arial, sans-serif;
-      padding: 20px;
+      color: #eee;
+      padding: 2rem;
     }
-
     h1 {
-      font-size: 2em;
-      margin-bottom: 0.5em;
+      text-align: center;
+      margin-bottom: 2rem;
     }
-
     table {
-      border-collapse: collapse;
       width: 100%;
-      margin-top: 1em;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
     }
-
     th, td {
-      border: 1px solid #444;
-      padding: 8px;
+      border: 1px solid #555;
+      padding: 0.5rem;
       text-align: center;
     }
-
     th {
       background-color: #333;
     }
-
     tr:nth-child(even) {
       background-color: #2a2a2a;
     }
-
-    .note {
-      font-size: 0.9em;
-      color: #aaa;
+    .input-container {
+      margin: 2rem 0;
+      text-align: center;
     }
-
-    .back-link {
-      margin-top: 2em;
-      display: inline-block;
-      color: #4da6ff;
-      text-decoration: none;
+    input {
+      padding: 0.5rem;
+      font-size: 1rem;
+      width: 60px;
     }
-
-    .back-link:hover {
-      text-decoration: underline;
+    button {
+      padding: 0.5rem 1rem;
+      margin-left: 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <h1>Progression de la pioche</h1>
-  <p class="note">Cette page est isolée des styles du site principal.</p>
+
+  <div class="input-container">
+    <label for="level">Niveau actuel :</label>
+    <input type="number" id="level" min="1" max="40" value="1">
+    <button onclick="calculateTime()">Calculer le temps</button>
+    <div id="result" class="result"></div>
+  </div>
 
   <table>
     <thead>
       <tr>
         <th>Niveau</th>
         <th>Blocs à casser</th>
-        <th>Remarques</th>
+        <th>Durée/pioche</th>
+        <th>Temps estimé (s)</th>
       </tr>
     </thead>
-    <tbody>
-      <tr><td>1 → 2</td><td>52</td><td></td></tr>
-      <tr><td>2 → 3</td><td>208</td><td></td></tr>
-      <tr><td>3 → 4</td><td>404</td><td></td></tr>
-      <tr><td>4 → 5</td><td>625</td><td></td></tr>
-      <tr><td>5 → 6</td><td>866</td><td></td></tr>
-      <tr><td>6 → 7</td><td>1125</td><td></td></tr>
-      <tr><td>7 → 8</td><td>1398</td><td></td></tr>
-      <tr><td>8 → 9</td><td>1683</td><td></td></tr>
-      <tr><td>9 → 10</td><td>1981</td><td></td></tr>
-      <tr><td>10 → 11</td><td>2289</td><td></td></tr>
-      <tr><td>11 → 12</td><td>2607</td><td>feuilles, neige</td></tr>
-      <tr><td>12 → 13</td><td>2935</td><td>feuilles, neige</td></tr>
-      <tr><td>13 → 14</td><td>3270</td><td>feuilles, neige</td></tr>
-      <tr><td>14 → 15</td><td>3615</td><td>feuilles, neige</td></tr>
-      <tr><td>15 → 16</td><td>3967</td><td>feuilles, neige</td></tr>
-      <tr><td>16 → 17</td><td>4326</td><td>feuilles, neige</td></tr>
-      <tr><td>17 → 18</td><td>4692</td><td>feuilles, neige</td></tr>
-      <tr><td>18 → 19</td><td>5065</td><td>feuilles, neige</td></tr>
-      <tr><td>19 → 20</td><td>5445</td><td>feuilles, neige</td></tr>
-    </tbody>
+    <tbody id="table-body"></tbody>
   </table>
 
-  <a class="back-link" href="/">← Retour à l'accueil</a>
+  <script>
+    const levelData = [
+      [1, 52], [2, 208], [3, 404], [4, 625], [5, 866],
+      [6, 1125], [7, 1398], [8, 1683], [9, 1981], [10, 2289],
+      [11, 2607], [12, 2935], [13, 3270], [14, 3615], [15, 3967],
+      [16, 4326], [17, 4692], [18, 5065], [19, 5445], [20, 5831],
+      [21, 6222], [22, 6620], [23, 7023], [24, 7431], [25, 7845],
+      [26, 8264], [27, 8688], [28, 9116], [29, 9550], [30, 9988],
+      [31, 10430], [32, 10876], [33, 11328], [34, 11783], [35, 12242],
+      [36, 12706], [37, 13173], [38, 13644], [39, 14119], [40, 0]
+    ];
+
+    function getEfficiency(level) {
+      if (level <= 10) return 0.95;
+      if (level <= 15) return 0.35;
+      if (level <= 25) return 0.25;
+      if (level <= 30) return 0.2;
+      if (level <= 35) return 0.18;
+      return 0.15;
+    }
+
+    function populateTable() {
+      const tbody = document.getElementById("table-body");
+      tbody.innerHTML = "";
+      for (let i = 0; i < levelData.length - 1; i++) {
+        const level = levelData[i][0];
+        const blocks = levelData[i][1];
+        const time = getEfficiency(level);
+        const totalTime = (blocks * time).toFixed(1);
+        const row = `<tr><td>${level} → ${level + 1}</td><td>${blocks}</td><td>${time}s</td><td>${totalTime}</td></tr>`;
+        tbody.innerHTML += row;
+      }
+    }
+
+    function calculateTime() {
+      const input = document.getElementById("level");
+      const result = document.getElementById("result");
+      let level = parseInt(input.value);
+      if (isNaN(level) || level < 1 || level >= 40) {
+        result.textContent = "Veuillez entrer un niveau entre 1 et 39.";
+        return;
+      }
+      let totalTime = 0;
+      for (let i = level - 1; i < levelData.length - 1; i++) {
+        const blocks = levelData[i][1];
+        const time = getEfficiency(levelData[i][0]);
+        totalTime += blocks * time;
+      }
+      result.textContent = `Temps estimé jusqu'au niveau 40 : ${totalTime.toFixed(1)} secondes (~${(totalTime/60).toFixed(1)} minutes)`;
+    }
+
+    populateTable();
+  </script>
 </body>
 </html>
-e
