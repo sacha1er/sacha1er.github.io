@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Progression de la pioche</title>
   <style>
-    body {
+    #progression-wrapper {
       font-family: Arial, sans-serif;
       background: #111;
       color: #f5f5f5;
@@ -13,26 +13,26 @@
       max-width: 900px;
       margin: auto;
     }
-    h1 {
+    #progression-wrapper h1 {
       color: #00c853;
     }
-    table {
+    #progression-wrapper table {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 2rem;
     }
-    th, td {
+    #progression-wrapper th, #progression-wrapper td {
       border: 1px solid #444;
       padding: 8px 12px;
       text-align: center;
     }
-    th {
+    #progression-wrapper th {
       background-color: #222;
     }
-    tr:nth-child(even) {
+    #progression-wrapper tr:nth-child(even) {
       background-color: #1a1a1a;
     }
-    .footer {
+    #progression-wrapper .footer {
       margin-top: 2rem;
       font-size: 0.9rem;
       color: #aaa;
@@ -40,19 +40,21 @@
   </style>
 </head>
 <body>
-  <h1>Progression de niveau de la pioche</h1>
-  <table>
-    <thead>
-      <tr>
-        <th>Niveau</th>
-        <th>Blocs requis</th>
-        <th>Temps par bloc (s)</th>
-        <th>Temps total (s)</th>
-      </tr>
-    </thead>
-    <tbody id="table-body"></tbody>
-  </table>
-  <div class="footer" id="footer"></div>
+  <div id="progression-wrapper">
+    <h1>Progression de niveau de la pioche</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Niveau</th>
+          <th>Blocs requis</th>
+          <th>Temps par bloc (s)</th>
+          <th>Temps total (s)</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+    <div class="footer" id="footer"></div>
+  </div>
 
   <script>
     const niveaux = [
