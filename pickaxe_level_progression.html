@@ -55,6 +55,22 @@
       font-size: 1.2rem;
       font-weight: bold;
     }
+    .progress-container {
+      width: 100%;
+      background-color: #333;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 1rem auto 2rem;
+      height: 30px;
+    }
+    .progress-bar {
+      height: 100%;
+      background-color: #4caf50;
+      text-align: center;
+      line-height: 30px;
+      color: white;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -65,6 +81,10 @@
     <input type="number" id="level" min="1" max="40" value="1">
     <button onclick="calculateTime()">Calculer le temps</button>
     <div id="result" class="result"></div>
+  </div>
+
+  <div class="progress-container">
+    <div id="progress-bar" class="progress-bar" style="width: 2.5%">Niveau 1</div>
   </div>
 
   <table>
@@ -116,18 +136,27 @@
     function calculateTime() {
       const input = document.getElementById("level");
       const result = document.getElementById("result");
+      const progressBar = document.getElementById("progress-bar");
       let level = parseInt(input.value);
       if (isNaN(level) || level < 1 || level >= 40) {
         result.textContent = "Veuillez entrer un niveau entre 1 et 39.";
+        progressBar.style.width = `0%`;
+        progressBar.textContent = "";
         return;
       }
+
       let totalTime = 0;
       for (let i = level - 1; i < levelData.length - 1; i++) {
         const blocks = levelData[i][1];
         const time = getEfficiency(levelData[i][0]);
         totalTime += blocks * time;
       }
-      result.textContent = `Temps estimé jusqu'au niveau 40 : ${totalTime.toFixed(1)} secondes (~${(totalTime/60).toFixed(1)} minutes)`;
+      result.textContent = `Temps estimé jusqu'au niveau 40 : ${totalTime.toFixed(1)} secondes (~${(totalTime / 60).toFixed(1)} minutes)`;
+
+      // Mise à jour de la barre de progression
+      const progressPercent = ((level - 1) / 39 * 100).toFixed(1);
+      progressBar.style.width = `${progressPercent}%`;
+      progressBar.textContent = `Niveau ${level}`;
     }
 
     populateTable();
