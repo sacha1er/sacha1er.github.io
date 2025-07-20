@@ -153,7 +153,7 @@
         const tr = document.createElement("tr");
         tr.innerHTML = `<td>${level} → ${level + 1}</td><td>${blocks}</td><td>${levelTime}s</td>`;
 
-        const image = level > 1 ? 'leaves.jpg' : 'netherrack.jpg';
+        const image = level < 1 ? 'leaves.jpg' : 'netherrack.jpg';
         tr.style.backgroundImage = `url('css/images/${image}')`;
         tr.style.backgroundRepeat = 'repeat';
         tr.style.backgroundSize = 'auto';
