@@ -3,150 +3,100 @@
 <head>
   <meta charset="UTF-8">
   <title>Progression de la pioche</title>
-  <link rel="stylesheet" href="css/style.css">
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     body {
       font-family: sans-serif;
-      background-image: url('css/images/background.jpg');
+      background-image: url('css/images/fond.jpg');
       background-size: cover;
       background-attachment: fixed;
-      background-repeat: no-repeat;
       background-position: center;
       color: white;
       padding: 2rem;
     }
-
     h1 {
       text-align: center;
       margin-bottom: 2rem;
     }
-
     table {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 2rem;
     }
-
     th, td {
       border: 1px solid #555;
       padding: 0.5rem;
       text-align: center;
-      background-color: rgba(0, 0, 0, 0.4);
     }
-
-    tr.level-row {
-      height: 40px;
-      background-repeat: repeat;
-      background-size: 40px 40px;
+    th {
+      background-color: #333;
     }
-
-    .input-container {
+    .input-container, .custom-speed-container {
       margin: 2rem 0;
       text-align: center;
     }
-
-    input[type="number"] {
+    input {
       padding: 0.5rem;
       font-size: 1rem;
       width: 60px;
     }
-
     button {
       padding: 0.5rem 1rem;
       margin-left: 1rem;
       font-size: 1rem;
       cursor: pointer;
     }
-
     .result {
       margin-top: 1rem;
       font-size: 1.2rem;
       font-weight: bold;
     }
-
-    .progress-bar-container {
+    .progress-bar {
       width: 100%;
       background-color: #333;
-      border-radius: 20px;
+      border-radius: 10px;
       overflow: hidden;
-      margin-top: 2rem;
-      height: 30px;
+      margin: 2rem 0;
     }
-
-    .progress-bar {
-      height: 100%;
-      background-color: limegreen;
+    .progress-bar-fill {
+      height: 20px;
+      background-color: #0f0;
+      width: 0%;
+      transition: width 0.5s;
+    }
+    .nav-button {
+      display: block;
+      margin: 2rem auto;
+      padding: 1rem 2rem;
+      background-color: #444;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
       text-align: center;
-      color: black;
-      line-height: 30px;
-      font-weight: bold;
-    }
-
-    .toggle-container {
-      text-align: center;
-      margin: 1rem 0;
-    }
-
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 60px;
-      height: 34px;
-    }
-
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      background-color: #ccc;
-      border-radius: 34px;
-      height: 100%;
-      width: 100%;
-      line-height: 34px;
-      text-align: center;
-      font-weight: bold;
-      color: black;
-      transition: background-color 0.3s;
-    }
-
-    .switch input:checked + .slider {
-      background-color: #66bb6a;
-    }
-
-    .switch input:checked + .slider::before {
-      content: "I";
-    }
-
-    .switch .slider::before {
-      content: "O";
+      width: fit-content;
     }
   </style>
 </head>
 <body>
   <h1>Progression de la pioche</h1>
 
-  <div class="toggle-container">
-    <label class="switch">
-      <input type="checkbox" id="toggleTextColor" onchange="toggleTextColor()">
-      <span class="slider"></span>
-    </label>
-  </div>
-
   <div class="input-container">
     <label for="level">Niveau actuel :</label>
-    <input type="number" id="level" min="1" max="40" value="1" onchange="updateProgressBar()">
+    <input type="number" id="level" min="1" max="40" value="1">
     <button onclick="calculateTime()">Calculer le temps</button>
     <div id="result" class="result"></div>
   </div>
 
-  <div class="progress-bar-container">
-    <div id="progress-bar" class="progress-bar">Niveau 1/40</div>
+  <div class="progress-bar">
+    <div id="progress-bar-fill" class="progress-bar-fill"></div>
   </div>
+
+  <a href="custom_speed.html" class="nav-button">🔧 Utiliser ma vitesse de minage</a>
 
   <table>
     <thead>
@@ -169,40 +119,36 @@
       [21, 6222], [22, 6620], [23, 7023], [24, 7431], [25, 7845],
       [26, 8264], [27, 8688], [28, 9116], [29, 9550], [30, 9988],
       [31, 10430], [32, 10876], [33, 11328], [34, 11783], [35, 12242],
-      [36, 12706], [37, 13173], [38, 13644], [39, 14119]
+      [36, 12706], [37, 13173], [38, 13644], [39, 14119], [40, 0]
     ];
 
     function getEfficiency(level) {
-      if (level <= 5) return 0.95;
-      if (level <= 10) return 0.5;
+      if (level <= 10) return 0.95;
       if (level <= 15) return 0.35;
-      if (level <= 20) return 0.25;
-      if (level <= 25) return 0.2;
-      if (level <= 30) return 0.18;
-      if (level <= 35) return 0.15;
-      if (level <= 40) return 0.13;
+      if (level <= 25) return 0.25;
+      if (level <= 30) return 0.2;
+      if (level <= 35) return 0.18;
       return 0.15;
     }
 
     function populateTable() {
       const tbody = document.getElementById("table-body");
       tbody.innerHTML = "";
-      for (let i = 0; i < levelData.length; i++) {
+      for (let i = 0; i < levelData.length - 1; i++) {
         const level = levelData[i][0];
         const blocks = levelData[i][1];
         const time = getEfficiency(level);
         const totalTime = (blocks * time).toFixed(1);
 
         const row = document.createElement('tr');
-        row.className = 'level-row';
         row.innerHTML = `<td>${level} → ${level + 1}</td><td>${blocks}</td><td>${time}s</td><td>${totalTime}</td>`;
 
         const image = level <= 20 ? 'leaves.jpg' : 'netherrack.jpg';
         row.style.backgroundImage = `url('css/images/${image}')`;
         row.style.backgroundRepeat = 'repeat';
         row.style.backgroundSize = '40px 40px';
-        row.style.height = '40px';
         row.style.color = 'white';
+        row.style.height = '40px';
 
         tbody.appendChild(row);
       }
@@ -211,40 +157,28 @@
     function calculateTime() {
       const input = document.getElementById("level");
       const result = document.getElementById("result");
+      const progress = document.getElementById("progress-bar-fill");
+
       let level = parseInt(input.value);
       if (isNaN(level) || level < 1 || level >= 40) {
         result.textContent = "Veuillez entrer un niveau entre 1 et 39.";
         return;
       }
+
       let totalTime = 0;
-      for (let i = level - 1; i < levelData.length; i++) {
+      for (let i = level - 1; i < levelData.length - 1; i++) {
         const blocks = levelData[i][1];
         const time = getEfficiency(levelData[i][0]);
         totalTime += blocks * time;
       }
-      result.textContent = `Temps estimé jusqu'au niveau 40 : ${totalTime.toFixed(1)} secondes (~${(totalTime / 60).toFixed(1)} minutes, ${(totalTime / 60 / 60).toFixed(1)} heures) `;
-    }
 
-    function updateProgressBar() {
-      const input = document.getElementById("level");
-      const progress = document.getElementById("progress-bar");
-      let level = parseInt(input.value);
-      if (isNaN(level) || level < 1) level = 1;
-      if (level > 40) level = 40;
-      const percent = (level / 40) * 100;
+      const percent = ((level - 1) / 39) * 100;
       progress.style.width = percent + "%";
-      progress.textContent = `Niveau ${level}/40`;
-    }
 
-    function toggleTextColor() {
-      const checked = document.getElementById("toggleTextColor").checked;
-      const color = checked ? 'black' : 'white';
-      document.body.style.color = color;
-      document.querySelectorAll("td, th").forEach(el => el.style.color = color);
+      result.textContent = `Temps estimé jusqu'au niveau 40 : ${totalTime.toFixed(1)} secondes (~${(totalTime/60).toFixed(1)} minutes)`;
     }
 
     populateTable();
-    updateProgressBar();
   </script>
 </body>
 </html>
