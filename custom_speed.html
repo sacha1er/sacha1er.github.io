@@ -2,24 +2,34 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Calcul avec vitesse personnalisée</title>
+  <title>Vitesse personnalisée - POG</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
     body {
+      margin: 0;
       font-family: sans-serif;
-      background-image: url('css/images/background.jpg');
+      background-image: url('css/images/bg.jpg');
       background-size: cover;
       background-attachment: fixed;
-      color: #eee;
+      color: white;
       padding: 2rem;
     }
     h1 {
       text-align: center;
       margin-bottom: 2rem;
+    }
+    .input-container {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    input {
+      padding: 0.5rem;
+      margin: 0.5rem;
+      font-size: 1rem;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
     }
     table {
       width: 100%;
@@ -32,41 +42,43 @@
       text-align: center;
     }
     th {
-      background-color: #333;
+      background-color: rgba(0, 0, 0, 0.5);
     }
     tr {
       height: 40px;
-      color: white;
+    }
+    tr:nth-child(even) {
+      background-image: url('css/images/leaves.jpg');
+    }
+    tr:nth-child(odd) {
+      background-image: url('css/images/netherrack.jpg');
+    }
+    tr {
       background-repeat: repeat;
-      background-size: 40px 40px;
-      background-position: top left;
+      background-size: auto;
+      color: white;
     }
-    .input-container {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    input {
-      padding: 0.5rem;
-      font-size: 1rem;
-      width: 100px;
-      text-align: center;
-    }
-    button {
+    .nav-button {
+      display: block;
+      margin: 2rem auto;
       padding: 0.5rem 1rem;
-      margin: 1rem;
       font-size: 1rem;
+      background-color: #444;
+      color: white;
+      border: none;
       cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <h1>Calcul du temps par vitesse personnalisée</h1>
+  <h1>Calcul personnalisé du temps de minage</h1>
 
   <div class="input-container">
-    <label for="speed">Temps pour casser 100 blocs (en secondes) :</label>
-    <input type="number" id="speed" min="1" placeholder="ex: 60">
-    <button onclick="calculate()">Calculer</button>
-    <button onclick="location.href='pickaxe_level_progression.html'">← Retour à la progression</button>
+    <label for="level">Niveau actuel :</label>
+    <input type="number" id="level" min="1" max="39" value="1">
+    <label for="time">Temps pour miner 10% (en secondes) :</label>
+    <input type="number" id="time" step="0.1" value="10">
+    <button onclick="calculateTimes()">Calculer</button>
   </div>
 
   <table>
@@ -77,8 +89,10 @@
         <th>Temps estimé (s)</th>
       </tr>
     </thead>
-    <tbody id="table-body"></tbody>
+    <tbody id="result-body"></tbody>
   </table>
+
+  <button class="nav-button" onclick="location.href='pickaxe_level_progression.html'">← Retour à la progression</button>
 
   <script>
     const levelData = [
@@ -89,37 +103,31 @@
       [21, 6222], [22, 6620], [23, 7023], [24, 7431], [25, 7845],
       [26, 8264], [27, 8688], [28, 9116], [29, 9550], [30, 9988],
       [31, 10430], [32, 10876], [33, 11328], [34, 11783], [35, 12242],
-      [36, 12706], [37, 13173], [38, 13644], [39, 14119], [40, 0]
+      [36, 12706], [37, 13173], [38, 13644], [39, 14119]
     ];
 
-    function calculate() {
-      const speedInput = document.getElementById("speed").value;
-      const tbody = document.getElementById("table-body");
+    function calculateTimes() {
+      const level = parseInt(document.getElementById("level").value);
+      const tenPercentTime = parseFloat(document.getElementById("time").value);
+      const tbody = document.getElementById("result-body");
       tbody.innerHTML = "";
 
-      const speed = parseFloat(speedInput);
-      if (isNaN(speed) || speed <= 0) {
-        alert("Veuillez entrer un temps valide.");
+      if (isNaN(level) || isNaN(tenPercentTime) || level < 1 || level >= 40) {
+        tbody.innerHTML = '<tr><td colspan="3">Entrées invalides.</td></tr>';
         return;
       }
 
-      for (let i = 0; i < levelData.length - 1; i++) {
-        const level = levelData[i][0];
-        const blocks = levelData[i][1];
-        const levelTime = ((blocks / 100) * speed).toFixed(1);
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `<td>${level} → ${level + 1}</td><td>${blocks}</td><td>${levelTime}s</td>`;
-
-        const image = level <= 20 ? 'leaves.jpg' : 'netherrack.jpg';
-        tr.style.backgroundImage = `url('css/images/${image}')`;
-        tr.style.backgroundRepeat = 'repeat';
-        tr.style.backgroundSize = '40px 40px';
-        tr.style.backgroundPosition = 'top left';
-        tr.style.height = '40px';
-        tr.style.color = 'white';
-
-        tbody.appendChild(tr);
+      for (let i = level - 1; i < levelData.length; i++) {
+        const [lvl, blocks] = levelData[i];
+        const timeForLevel = (tenPercentTime / (blocks * 0.1)) * blocks;
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${lvl} → ${lvl + 1}</td><td>${blocks}</td><td>${timeForLevel.toFixed(1)}</td>`;
+        row.style.backgroundImage = `url('css/images/${lvl <= 20 ? 'leaves.jpg' : 'netherrack.jpg'}')`;
+        row.style.backgroundRepeat = 'repeat';
+        row.style.backgroundSize = 'auto';
+        row.style.height = '40px';
+        row.style.color = 'white';
+        tbody.appendChild(row);
       }
     }
   </script>
