@@ -36,7 +36,7 @@
     th {
       background-color: #333;
     }
-    .input-container {
+    .input-container, .custom-speed-container {
       margin: 2rem 0;
       text-align: center;
     }
@@ -104,16 +104,17 @@
       <tr>
         <th>Niveau</th>
         <th>Blocs à casser</th>
-        <th>Durée/bloc</th>
+        <th>Temps/bloc</th>
         <th>Temps estimé (s)</th>
+        <th>Temps estimé (s) 2 blocs</th>
       </tr>
     </thead>
     <tbody id="table-body"></tbody>
   </table>
 
   <script>
-    // Temps fixe basé sur 662 blocs en 44 secondes → 0.0665 s par bloc
-    const timePerBlock = 44 / 662;
+    // Temps pour 1 bloc = 11 secondes / 165.5 blocs
+    const TIME_PER_BLOCK = 11 / 165.5;
 
     const levelData = [
       [1, 52], [2, 208], [3, 404], [4, 625], [5, 866],
@@ -124,7 +125,7 @@
       [26, 8264], [27, 8688], [28, 9116], [29, 9550], [30, 9988],
       [31, 10430], [32, 10876], [33, 11328], [34, 11783], [35, 12242],
       [36, 12706], [37, 13173], [38, 13644], [39, 14119], [40, 0]
-    ].map(([lvl, blocks]) => [lvl, Math.round(blocks / 4)]); // On divise par 4
+    ].map(([lvl, blocks]) => [lvl, Math.round(blocks / 4)]);
 
     function populateTable() {
       const tbody = document.getElementById("table-body");
@@ -132,10 +133,18 @@
       for (let i = 0; i < levelData.length - 1; i++) {
         const level = levelData[i][0];
         const blocks = levelData[i][1];
-        const totalTime = (blocks * timePerBlock).toFixed(1);
+        const time = TIME_PER_BLOCK;
+        const totalTime = blocks * time;
+        const totalTime2 = totalTime * 1.25;
 
         const row = document.createElement('tr');
-        row.innerHTML = `<td>${level} → ${level + 1}</td><td>${blocks}</td><td>${timePerBlock.toFixed(4)}s</td><td>${totalTime}</td>`;
+        row.innerHTML = `
+          <td>${level} → ${level + 1}</td>
+          <td>${blocks}</td>
+          <td>${time.toFixed(4)}s</td>
+          <td>${totalTime.toFixed(1)}</td>
+          <td>${totalTime2.toFixed(1)}</td>
+        `;
 
         const image = level <= 20 ? 'leaves.jpg' : 'netherrack.jpg';
         row.style.backgroundImage = `url('css/images/${image}')`;
@@ -162,7 +171,7 @@
       let totalTime = 0;
       for (let i = level - 1; i < levelData.length - 1; i++) {
         const blocks = levelData[i][1];
-        totalTime += blocks * timePerBlock;
+        totalTime += blocks * TIME_PER_BLOCK;
       }
 
       const percent = ((level - 1) / 39) * 100;
