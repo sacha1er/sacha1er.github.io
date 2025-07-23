@@ -3,47 +3,101 @@
 <head>
   <meta charset="UTF-8">
   <title>Progression de la pioche</title>
-  <link rel="stylesheet" href="css/style.css">
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     body {
+       font-family: sans-serif;
       background-image: url('css/images/background.jpg');
       background-size: cover;
-      background-repeat: no-repeat;
       background-attachment: fixed;
+      background-repeat: no-repeat;
+      background-position: center;
+      color: white;
+      padding: 2rem;
     }
-    .dark-mode-toggle {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: #fff;
-      color: #000;
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
+    }
+    th, td {
+      border: 1px solid #555;
       padding: 0.5rem;
+      text-align: center;
+    }
+    th {
+      background-color: #333;
+    }
+    .input-container, .custom-speed-container {
+      margin: 2rem 0;
+      text-align: center;
+    }
+    input {
+      padding: 0.5rem;
+      font-size: 1rem;
+      width: 60px;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      margin-left: 1rem;
+      font-size: 1rem;
       cursor: pointer;
-      border-radius: 5px;
+    }
+    .result {
+      margin-top: 1rem;
+      font-size: 1.2rem;
       font-weight: bold;
     }
-    .dark body {
-      color: white;
+    .progress-bar {
+      width: 100%;
+      background-color: #333;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 2rem 0;
     }
-    table td, table th {
-      height: 40px;
+    .progress-bar-fill {
+      height: 20px;
+      background-color: #0f0;
+      width: 0%;
+      transition: width 0.5s;
+    }
+    .nav-button {
+      display: block;
+      margin: 2rem auto;
+      padding: 1rem 2rem;
+      background-color: #444;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      text-align: center;
+      width: fit-content;
     }
   </style>
 </head>
 <body>
-  <div class="dark-mode-toggle" onclick="toggleDarkMode()">O / I</div>
   <h1>Progression de la pioche</h1>
 
   <div class="input-container">
     <label for="level">Niveau actuel :</label>
-    <input type="number" id="level" min="1" max="39" value="1">
+    <input type="number" id="level" min="1" max="40" value="1">
     <button onclick="calculateTime()">Calculer le temps</button>
     <div id="result" class="result"></div>
   </div>
 
-  <div class="button-container">
-    <a href="custom_speed.html"><button>Calculer avec votre vitesse</button></a>
+  <div class="progress-bar">
+    <div id="progress-bar-fill" class="progress-bar-fill"></div>
   </div>
+
+  <a href="custom_speed.html" class="nav-button">🔧 Utiliser ma vitesse de minage</a>
 
   <table>
     <thead>
@@ -59,22 +113,25 @@
 
   <script>
     const levelData = [
-      [1, 13], [2, 52], [3, 101], [4, 156], [5, 216],
-      [6, 281], [7, 349], [8, 420], [9, 495], [10, 572],
-      [11, 651], [12, 733], [13, 817], [14, 903], [15, 991],
-      [16, 1081], [17, 1173], [18, 1266], [19, 1361], [20, 1457],
-      [21, 1555], [22, 1655], [23, 1755], [24, 1857], [25, 1961],
-      [26, 2066], [27, 2172], [28, 2279], [29, 2387], [30, 2497],
-      [31, 2607], [32, 2719], [33, 2832], [34, 2945], [35, 3060],
-      [36, 3176], [37, 3293], [38, 3411], [39, 3530], [40, 0]
+      [1, 52], [2, 208], [3, 404], [4, 625], [5, 866],
+      [6, 1125], [7, 1398], [8, 1683], [9, 1981], [10, 2289],
+      [11, 2607], [12, 2935], [13, 3270], [14, 3615], [15, 3967],
+      [16, 4326], [17, 4692], [18, 5065], [19, 5445], [20, 5831],
+      [21, 6222], [22, 6620], [23, 7023], [24, 7431], [25, 7845],
+      [26, 8264], [27, 8688], [28, 9116], [29, 9550], [30, 9988],
+      [31, 10430], [32, 10876], [33, 11328], [34, 11783], [35, 12242],
+      [36, 12706], [37, 13173], [38, 13644], [39, 14119], [40, 0]
     ];
 
     function getEfficiency(level) {
-      if (level <= 10) return 0.95;
+       if (level <= 5) return 0.95;
+      if (level <= 10) return 0.5;
       if (level <= 15) return 0.35;
-      if (level <= 25) return 0.25;
-      if (level <= 30) return 0.2;
-      if (level <= 35) return 0.18;
+      if (level <= 20) return 0.25;
+      if (level <= 25) return 0.2;
+      if (level <= 30) return 0.18;
+      if (level <= 35) return 0.15;
+      if (level <= 40) return 0.13;
       return 0.15;
     }
 
@@ -94,9 +151,8 @@
         row.style.backgroundImage = `url('css/images/${image}')`;
         row.style.backgroundRepeat = 'repeat';
         row.style.backgroundSize = '40px 40px';
-        row.style.backgroundPosition = 'center';
+        row.style.color = 'white';
         row.style.height = '40px';
-        row.style.color = document.body.classList.contains('dark') ? 'white' : 'black';
 
         tbody.appendChild(row);
       }
@@ -105,23 +161,25 @@
     function calculateTime() {
       const input = document.getElementById("level");
       const result = document.getElementById("result");
+      const progress = document.getElementById("progress-bar-fill");
+
       let level = parseInt(input.value);
       if (isNaN(level) || level < 1 || level >= 40) {
         result.textContent = "Veuillez entrer un niveau entre 1 et 39.";
         return;
       }
+
       let totalTime = 0;
       for (let i = level - 1; i < levelData.length - 1; i++) {
         const blocks = levelData[i][1];
         const time = getEfficiency(levelData[i][0]);
         totalTime += blocks * time;
       }
-      result.textContent = `Temps estimé jusqu'au niveau 40 : ${totalTime.toFixed(1)} secondes (~${(totalTime/60).toFixed(1)} minutes)`;
-    }
 
-    function toggleDarkMode() {
-      document.body.classList.toggle('dark');
-      populateTable();
+      const percent = ((level - 1) / 39) * 100;
+      progress.style.width = percent + "%";
+
+      result.textContent = `Temps estimé jusqu'au niveau 40 : ${totalTime.toFixed(1)} secondes (~${(totalTime/60).toFixed(1)} minutes)`;
     }
 
     populateTable();
