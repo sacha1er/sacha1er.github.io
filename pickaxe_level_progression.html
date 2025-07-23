@@ -178,7 +178,7 @@
       const percent = ((level - 1) / 99) * 100;
       progress.style.width = percent + "%";
 
-      result.textContent = `Temps estimé jusqu'au niveau 100 : ${totalTime.toFixed(1)} secondes (~${(totalTime/60).toFixed(1)} minutes ${(totalTime/60/60).toFixed(1)} heures)`;
+      result.textContent = `Temps estimé jusqu'au niveau 100 : ${totalTime.toFixed(1)} secondes (~${(totalTime/60).toFixed(1)} minutes ${(totalTime/60/60).toFixed(1)} heures) / ${totalTime.toFixed(1)*1.25} secondes (~${(totalTime/60).toFixed(1)*1.25} minutes ${(totalTime/60/60).toFixed(1)*1.25} heures)`;
     }
 
     populateTable();
